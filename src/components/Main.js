@@ -32,6 +32,11 @@ function get30DegRandom() {
 }
 
 class ImgFigure extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
   handleClick(e){
     if(this.props.arrange.isCenter){
       this.props.inverse();
