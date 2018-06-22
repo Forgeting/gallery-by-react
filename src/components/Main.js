@@ -31,22 +31,24 @@ function get30DegRandom() {
   return (Math.random() > 0.5 ? '' : '-') + Math.round((Math.random() * 30));
 }
 
+//单个图片组件
 class ImgFigure extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(e){
-    if(this.props.arrange.isCenter){
+  handleClick(e) {
+    if (this.props.arrange.isCenter) {
       this.props.inverse();
-    }else{
+    } else {
       this.props.center();
     }
 
     e.stopPropagation();
     e.preventDefault();
   }
+
   render() {
     var styleObj = {};
     //如果此项有位置信息，则重新定位
@@ -62,7 +64,7 @@ class ImgFigure extends React.Component {
     }
 
     //如果此项是中心，则设置z-index为11
-    if(this.props.arrange.isCenter){
+    if (this.props.arrange.isCenter) {
       styleObj.zIndex = 11;
     }
 
@@ -71,7 +73,7 @@ class ImgFigure extends React.Component {
       styleObj = this.props.arrange.pos;
     }
     var imgFigureClassName = 'img-figure';
-      imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+    imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
 
     return (
       <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
@@ -83,6 +85,38 @@ class ImgFigure extends React.Component {
           </div>
         </figcaption>
       </figure>
+    )
+  }
+}
+
+//控制组件
+class ControllerUnit extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    e.stopPropagation;
+    e.preventDefault;
+    if (this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+  }
+
+  render() {
+    var controllerUnitClassName = 'controller-unit';
+
+    if (this.props.arrange.isCenter) {
+      controllerUnitClassName += ' is-center';
+      if (this.props.arrange.isInverse) {
+        controllerUnitClassName += ' is-inverse';
+      }
+    }
+    return (
+      <span className={controllerUnitClassName} onClick={this.handleClick}></span>
     )
   }
 }
@@ -238,7 +272,6 @@ class AppComponent extends React.Component {
 
     imgsArrangeArr.splice(centerIndex, 0, imgsArrangeCenterArr[0]);
 
-    console.log(imgsArrangeArr);
     this.setState({
       imgsArrangeArr: imgsArrangeArr
     });
@@ -267,8 +300,8 @@ class AppComponent extends React.Component {
    * @param index, 需要被居中的图片对应的图片信息数组的index值
    * @returns {Function}
    */
-  center(index){
-    return function(){
+  center(index) {
+    return function () {
       this.rearrange(index);
     }.bind(this)
   }
@@ -290,7 +323,11 @@ class AppComponent extends React.Component {
         }
       }
       imgFigures.push(<ImgFigure ref={'imgFigure' + index} data={value} key={index}
-                                 arrange={this.state.imgsArrangeArr[index]} center={this.center(index)} inverse={this.inverse(index)}/>)
+                                 arrange={this.state.imgsArrangeArr[index]} center={this.center(index)}
+                                 inverse={this.inverse(index)}/>)
+      controllerUnits.push(<ControllerUnit key={index}
+                                           arrange={this.state.imgsArrangeArr[index]} center={this.center(index)}
+                                           inverse={this.inverse(index)}/>)
     }.bind(this))
 
     return (
